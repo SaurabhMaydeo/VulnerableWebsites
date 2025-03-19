@@ -1,14 +1,97 @@
 /* Custom styles */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+}
+
+/* Card styles */
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
 .card-img-top {
-    height: 200px;
+    height: 250px;
     object-fit: cover;
+    border-top-left-radius: calc(0.25rem - 1px);
+    border-top-right-radius: calc(0.25rem - 1px);
 }
 
+.card-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    color: var(--secondary-color);
+}
+
+/* Hero section */
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Navigation */
 .navbar {
-    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
 
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+/* Buttons */
+.btn-primary {
+    padding: 0.5rem 1.5rem;
+}
+
+.btn-outline-primary:hover {
+    transform: translateY(-1px);
+}
+
+/* Book cover */
 .book-cover {
     max-width: 300px;
     height: auto;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    border-radius: 0.25rem;
+}
+
+/* Category badges */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 1em;
+}
+
+/* Footer */
+.footer {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    background-color: #343a40;
+    color: white;
+}
+
+/* Search bar */
+.input-group-lg > .form-control {
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 200px;
+    }
+    
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }

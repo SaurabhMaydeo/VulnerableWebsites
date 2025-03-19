@@ -1,5 +1,6 @@
 <?php
-$db = new SQLite3(__DIR__ . '/../../public/database.db');
+session_start();
+$db = new SQLite3(__DIR__ . '/../../public/database/library.db');
 
 // Intentionally vulnerable function - no input sanitization
 function query($sql) {

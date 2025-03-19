@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XSS Test Page</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { margin-bottom: 40px; padding: 20px; background: white; border-radius: 8px; box-shadow: var(--shadow); }
+        .output { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>XSS Vulnerability Test Page</h1>
+        
+        <!-- XSS Vulnerability #1: Reflected XSS via Search -->
+        <div class="test-section">
+            <h2>Test 1: Reflected XSS (Search)</h2>
+            <p>Try searching with this payload: <code>&lt;script&gt;alert('XSS!')&lt;/script&gt;</code></p>
+            
+            <form id="searchForm">
+                <input type="text" id="searchQuery" placeholder="Enter search term...">
+                <button type="submit">Search</button>
+            </form>
+            <div id="searchResults" class="output"></div>
+        </div>
+
+        <!-- XSS Vulnerability #2: Stored XSS via Reviews -->
+        <div class="test-section">
+            <h2>Test 2: Stored XSS (Product Reviews)</h2>
+            <p>Add a review with this payload in the username or comment: <code>&lt;script&gt;alert('Stored XSS!')&lt;/script&gt;</code></p>
+            
+            <form id="reviewForm">
+                <input type="text" id="username" placeholder="Username">
+                <textarea id="comment" placeholder="Your review..."></textarea>
+                <button type="submit">Add Review</button>
+            </form>
+            <div id="reviewsList" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        // Search Form Handler (Reflected XSS)
+        document.getElementById('searchForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const query = document.getElementById('searchQuery').value;
+            const response = await fetch(`/api/search?q=${query}`);
+            const data = await response.json();
+            
+            // Vulnerable: Directly inserting the query parameter
+            document.getElementById('searchResults').innerHTML = `
+                <h3>Search Results for: ${data.query}</h3>
+                <ul>
+                    ${data.results.map(item => `<li>${item.name} - ${item.description}</li>`).join('')}
+                </ul>
+            `;
+        };
+
+        // Review Form Handler (Stored XSS)
+        document.getElementById('reviewForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const comment = document.getElementById('comment').value;
+            
+            // Send review to server
+            await fetch('/api/products/1/reviews', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, comment })
+            });
+
+            // Load and display all reviews
+            const response = await fetch('/api/products/1/reviews');
+            const reviews = await response.json();
+            
+            // Vulnerable: Directly inserting unsanitized review data
+            document.getElementById('reviewsList').innerHTML = reviews.map(review => `
+                <div class="review">
+                    <strong>${review.username}</strong>: ${review.comment}
+                    <small>(${new Date(review.date).toLocaleDateString()})</small>
+                </div>
+            `).join('');
+
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('comment').value = '';
+        };
+    </script>
+</body>
+</html>

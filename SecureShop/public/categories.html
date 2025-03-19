@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories - SecureShop</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1><i class="fas fa-shopping-bag"></i> SecureShop</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/categories" class="active"><i class="fas fa-th"></i> Categories</a></li>
+            <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-right">
+          <a href="#" class="cart-icon" id="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge" id="cart-count">0</span>
+          </a>
+          <a href="#" class="btn btn-outline" id="login-btn">Login</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Shop by Category</h1>
+      
+      <div class="search-section">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <button onclick="searchProducts()">Search</button>
+      </div>
+
+      <div class="categories-grid">
+        <div class="category-card" onclick="showCategory('Electronics')">
+          <div class="category-icon">
+            <i class="fas fa-laptop"></i>
+          </div>
+          <div class="category-content">
+            <h3>Electronics</h3>
+            <p>Latest gadgets and devices</p>
+          </div>
+        </div>
+
+        <div class="category-card" onclick="showCategory('Fashion')">
+          <div class="category-icon">
+            <i class="fas fa-tshirt"></i>
+          </div>
+          <div class="category-content">
+            <h3>Fashion</h3>
+            <p>Trendy clothing and accessories</p>
+          </div>
+        </div>
+
+        <div class="category-card" onclick="showCategory('Home')">
+          <div class="category-icon">
+            <i class="fas fa-home"></i>
+          </div>
+          <div class="category-content">
+            <h3>Home & Living</h3>
+            <p>Make your home beautiful</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="selectedCategory"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3><i class="fas fa-shopping-bag"></i> SecureShop</h3>
+          <p>Your one-stop shop for amazing products!</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/categories">Categories</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-envelope"></i> info@secureshop.com</p>
+          <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+        </div>
+        <div class="footer-section">
+          <h3>Follow Us</h3>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 SecureShop. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // XSS Vulnerability 1: Through search
+    function searchProducts() {
+      const query = document.getElementById('searchInput').value;
+      const results = document.getElementById('selectedCategory');
+      
+      // Execute any script tags directly
+      results.innerHTML = query;
+
+      // Create and execute a new script element
+      const script = document.createElement('script');
+      script.text = query.replace(/<\/?script>/g, '');
+      document.body.appendChild(script);
+    }
+
+    function showCategory(category) {
+      const results = document.getElementById('selectedCategory');
+      results.innerHTML = category;
+    }
+
+    // Check URL parameters on load
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category');
+      if (category) {
+        showCategory(category);
+      }
+    }
+  </script>
+</body>
+</html>

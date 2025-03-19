@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - SecureShop</title>
+  <link rel="stylesheet" href="/css/styles.css">
+
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>SecureShop</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="#">Categories</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="search-container">
+        <form id="search-form">
+          <input type="text" id="search-input" placeholder="Search products...">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section id="search-results" class="search-results hidden">
+        <h2>Search Results for: <span id="search-query"></span></h2>
+        <div id="search-products" class="products-grid"></div>
+      </section>
+      
+      <section id="product-details" class="product-details">
+        <div class="product-image">
+          <img id="product-image" src="" alt="Product Image">
+        </div>
+        <div class="product-info">
+          <h2 id="product-name"></h2>
+          <div class="product-price">$<span id="product-price"></span></div>
+          <div class="product-description" id="product-description"></div>
+          <button class="buy-button">Add to Cart</button>
+        </div>
+      </section>
+      
+      <section class="reviews-section">
+        <h3>Customer Reviews</h3>
+        <div id="reviews-container"></div>
+        
+        <div class="add-review">
+          <h4>Add Your Review</h4>
+          <form id="review-form">
+            <div class="form-group">
+              <label for="username">Your Name:</label>
+              <input type="text" id="username">
+            </div>
+            <div class="form-group">
+              <label for="rating">Rating:</label>
+              <select id="rating" required>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Very Good</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Fair</option>
+                <option value="1">1 - Poor</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="comment">Review:</label>
+              <textarea id="comment"></textarea>
+            </div>
+            <button type="submit">Submit Review</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 SecureShop. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/product.js"></script>
+</body>
+</html>

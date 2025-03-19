@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <% if (typeof user !== 'undefined' && user) { %>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Create a Post</h5>
+                    <form action="/post" method="POST">
+                        <div class="mb-3">
+                            <!-- Vulnerable: No input sanitization -->
+                            <textarea class="form-control" name="content" rows="3" placeholder="What's on your mind?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </form>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="text-center">
+                <h1>Welcome to ConnectHub</h1>
+                <p class="lead">Join our community to connect with friends and share your thoughts!</p>
+                <div class="mt-4">
+                    <a href="/register" class="btn btn-primary me-2">Register</a>
+                    <a href="/login" class="btn btn-outline-primary">Login</a>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>

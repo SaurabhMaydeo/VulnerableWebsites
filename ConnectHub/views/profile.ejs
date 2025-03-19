@@ -1,0 +1,31 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Profile</h2>
+                    
+                    <!-- Vulnerable: Custom CSS injection -->
+                    <style>
+                        <%- user.custom_css %>
+                    </style>
+                    
+                    <div class="profile-info">
+                        <h3><%- user.username %></h3>
+                        <!-- Vulnerable: Renders unsanitized markdown -->
+                        <div class="bio"><%- user.profile %></div>
+                    </div>
+                    
+                    <!-- Vulnerable: CSS Injection Form -->
+                    <form action="/profile/customize" method="POST" class="mt-4">
+                        <div class="mb-3">
+                            <label class="form-label">Custom CSS</label>
+                            <textarea class="form-control" name="custom_css" rows="5" placeholder="Add your custom CSS here..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Style</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

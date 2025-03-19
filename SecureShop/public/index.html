@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureShop - Online Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1><i class="fas fa-shopping-bag"></i> SecureShop</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/categories"><i class="fas fa-th"></i> Categories</a></li>
+            <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-right">
+          <a href="#" class="cart-icon" id="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge" id="cart-count">0</span>
+          </a>
+          <a href="#" class="btn btn-outline" id="login-btn">Login</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- Hero Section with Search -->
+      <section class="hero mb-3">
+        <h1 class="mb-2"><i class="fas fa-store"></i> Welcome to SecureShop</h1>
+        <p class="mb-3">Discover amazing products at unbeatable prices!</p>
+        <div class="search-container">
+          <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search products..." class="search-input">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Flash Sale Section -->
+      <section class="flash-sale mb-3">
+        <div class="section-header">
+          <h2><i class="fas fa-bolt"></i> Flash Sale</h2>
+          <div class="countdown" id="sale-countdown">Ends in: 05:59:59</div>
+        </div>
+        <div id="flash-sale-products" class="products-grid"></div>
+      </section>
+
+      <!-- Search Results -->
+      <section id="search-results" class="hidden mb-3">
+        <div class="section-header">
+          <h2><i class="fas fa-search"></i> Search Results for: <span id="search-query"></span></h2>
+          <div class="results-count" id="results-count"></div>
+        </div>
+        <div id="search-products" class="products-grid"></div>
+      </section>
+
+      <!-- Featured Products -->
+      <section class="featured-products mb-3">
+        <div class="section-header">
+          <h2><i class="fas fa-star"></i> Featured Products</h2>
+          <div class="view-options">
+            <button class="btn btn-outline active" data-view="grid">
+              <i class="fas fa-th"></i>
+            </button>
+            <button class="btn btn-outline" data-view="list">
+              <i class="fas fa-list"></i>
+            </button>
+          </div>
+        </div>
+        <div id="products" class="products-grid"></div>
+      </section>
+
+      <!-- Newsletter Section -->
+      <section class="newsletter">
+        <h2><i class="fas fa-envelope"></i> Subscribe to Our Newsletter</h2>
+        <p>Get the latest updates and exclusive offers!</p>
+        <form id="newsletter-form" class="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3><i class="fas fa-shopping-bag"></i> SecureShop</h3>
+          <p>Your one-stop shop for amazing products!</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/categories">Categories</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-envelope"></i> info@secureshop.com</p>
+          <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+        </div>
+        <div class="footer-section">
+          <h3>Follow Us</h3>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 SecureShop. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Vulnerable newsletter subscription
+    document.getElementById('newsletter-form').onsubmit = (e) => {
+      e.preventDefault();
+      const email = document.getElementById('newsletter-email').value;
+      // VULNERABLE: Directly insert user input
+      document.querySelector('.newsletter').innerHTML += 
+        `<div class="subscription-confirmation">${email} has been subscribed!</div>`;
+    };
+
+    // Countdown timer
+    function updateCountdown() {
+      const countdown = document.getElementById('sale-countdown');
+      let [hours, minutes, seconds] = countdown.textContent.split('Ends in: ')[1].split(':');
+      seconds = parseInt(seconds);
+      minutes = parseInt(minutes);
+      hours = parseInt(hours);
+
+      seconds--;
+      if (seconds < 0) {
+        seconds = 59;
+        minutes--;
+        if (minutes < 0) {
+          minutes = 59;
+          hours--;
+          if (hours < 0) {
+            countdown.textContent = 'Sale Ended!';
+            return;
+          }
+        }
+      }
+
+      countdown.textContent = `Ends in: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    setInterval(updateCountdown, 1000);
+
+    // Cart functionality with XSS vulnerability
+    let cartCount = 0;
+    document.addEventListener('click', (e) => {
+      if (e.target.matches('.add-to-cart')) {
+        cartCount++;
+        document.getElementById('cart-count').textContent = cartCount;
+        // VULNERABLE: Execute any script in the product name
+        const productName = e.target.dataset.name;
+        const message = `Added to cart: ${productName}`;
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.innerHTML = message; // VULNERABLE
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+      }
+    });
+
+    // VULNERABLE: Login form
+    document.getElementById('login-btn').onclick = (e) => {
+      e.preventDefault();
+      const loginForm = `
+        <div class="login-modal">
+          <h2>Login</h2>
+          <form id="login-form">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button type="submit">Login</button>
+          </form>
+        </div>
+      `;
+      // VULNERABLE: Inject login form
+      document.body.innerHTML += loginForm;
+    };
+  </script>
+</body>
+</html>

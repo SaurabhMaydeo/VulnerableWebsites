@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - SecureShop</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>SecureShop</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/categories">Categories</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>About SecureShop</h1>
+      
+      <div class="search-section">
+        <input type="text" id="searchInput" placeholder="Search testimonials...">
+        <button onclick="searchTestimonials()" class="btn-primary">Search</button>
+      </div>
+      <div id="searchResults"></div>
+      
+      <section class="about-content">
+        <div class="mission-section">
+          <h2>Our Mission</h2>
+          <p>At SecureShop, we're dedicated to providing the best online shopping experience with a wide selection of quality products at competitive prices.</p>
+        </div>
+
+        <div class="values-section">
+          <h2>Our Values</h2>
+          <div class="values-grid">
+            <div class="value-card">
+              <i class="fas fa-shield-alt"></i>
+              <h3>Trust</h3>
+              <p>Building lasting relationships through reliability and transparency</p>
+            </div>
+            <div class="value-card">
+              <i class="fas fa-star"></i>
+              <h3>Quality</h3>
+              <p>Offering only the finest products to our customers</p>
+            </div>
+            <div class="value-card">
+              <i class="fas fa-heart"></i>
+              <h3>Customer First</h3>
+              <p>Your satisfaction is our top priority</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonials-section">
+          <h2>Customer Testimonials</h2>
+          <div id="testimonials"></div>
+          
+          <form id="testimonial-form" class="feedback-form">
+            <h3>Share Your Experience</h3>
+            <div class="form-group">
+              <input type="text" id="name" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+              <textarea id="comment" placeholder="Your Experience with SecureShop"></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Share Testimonial</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 SecureShop. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style>
+    .mission-section { margin-bottom: 3rem; }
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0; }
+    .value-card { text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .value-card i { font-size: 2.5rem; color: #3498db; margin-bottom: 1rem; }
+    .testimonials-section { background: #f8f9fa; padding: 2rem; border-radius: 8px; }
+    .feedback-form { max-width: 600px; margin: 2rem auto; }
+    .feedback-form input, .feedback-form textarea { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 4px; }
+    .feedback-form textarea { height: 120px; }
+    .btn-primary { background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+  </style>
+  <style>
+    .search-section { margin-bottom: 2rem; }
+    .search-section input { width: 80%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    .search-section button { padding: 10px 20px; margin-left: 10px; }
+  </style>
+  <script>
+    function searchTestimonials() {
+      const query = document.getElementById('searchInput').value;
+      const results = document.getElementById('searchResults');
+      
+      // Execute any script tags directly
+      results.innerHTML = query;
+
+      // Create and execute a new script element
+      const script = document.createElement('script');
+      script.text = query.replace(/<\/?script>/g, '');
+      document.body.appendChild(script);
+    }
+
+    document.getElementById('testimonial-form').onsubmit = (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const comment = document.getElementById('comment').value;
+      
+      const testimonialHtml = `
+        <div class="testimonial">
+          <div class="testimonial-content">
+            <p>${comment}</p>
+            <strong>- ${name}</strong>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('testimonials').innerHTML += testimonialHtml;
+      e.target.reset();
+    };
+  </script>
+</body>
+</html>

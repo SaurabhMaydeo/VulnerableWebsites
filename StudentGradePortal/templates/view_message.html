@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}View Message - Student Grade Portal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    {% if message.sender_id == session.user_id %}
+                    <i class="bi bi-send me-2"></i>Sent Message
+                    {% else %}
+                    <i class="bi bi-envelope-open me-2"></i>Received Message
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h3>{{ message.subject }}</h3>
+                    <div class="d-flex justify-content-between text-muted">
+                        <div>
+                            <strong>From:</strong> {{ message.sender_name }}
+                            <strong class="ms-3">To:</strong> {{ message.recipient_name }}
+                        </div>
+                        <div>
+                            <i class="bi bi-clock me-1"></i>{{ message.timestamp }}
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                
+                <div class="message-body mb-4">
+                    <p>{{ message.body|replace('\n', '<br>')|safe }}</p>
+                </div>
+            </div>
+            <div class="card-footer d-flex gap-2">
+                <a href="{{ url_for('messages') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Messages
+                </a>
+                
+                {% if message.recipient_id == session.user_id %}
+                <a href="{{ url_for('new_message') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-reply me-2"></i>Reply
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

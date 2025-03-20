@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Messages - Student Grade Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <h1 class="display-5"><i class="bi bi-envelope me-3"></i>Messages</h1>
+        <p class="lead">Communicate with professors and administrators.</p>
+        <a href="{{ url_for('new_message') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>New Message
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs mb-4" id="messagesTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="inbox-tab" data-bs-toggle="tab" data-bs-target="#inbox" type="button" role="tab">
+                    Inbox
+                    {% if inbox|selectattr('is_read', 'equalto', 0)|list|length > 0 %}
+                    <span class="badge bg-danger">{{ inbox|selectattr('is_read', 'equalto', 0)|list|length }}</span>
+                    {% endif %}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="sent-tab" data-bs-toggle="tab" data-bs-target="#sent" type="button" role="tab">
+                    Sent
+                </button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="messagesTabContent">
+            <div class="tab-pane fade show active" id="inbox" role="tabpanel">
+                <div class="card shadow">
+                    <div class="card-body">
+                        {% if inbox %}
+                        <div class="list-group">
+                            {% for message in inbox %}
+                            <a href="{{ url_for('view_message', message_id=message.id) }}" class="list-group-item list-group-item-action {% if not message.is_read %}list-group-item-primary{% endif %}">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">
+                                        {% if not message.is_read %}<i class="bi bi-envelope-fill me-2"></i>{% else %}<i class="bi bi-envelope-open me-2"></i>{% endif %}
+                                        {{ message.subject }}
+                                    </h5>
+                                    <small>{{ message.timestamp }}</small>
+                                </div>
+                                <p class="mb-1">From: {{ message.sender_name }}</p>
+                                <small class="text-muted">Click to view full message</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted">No messages in your inbox</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-pane fade" id="sent" role="tabpanel">
+                <div class="card shadow">
+                    <div class="card-body">
+                        {% if sent %}
+                        <div class="list-group">
+                            {% for message in sent %}
+                            <a href="{{ url_for('view_message', message_id=message.id) }}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">
+                                        <i class="bi bi-send me-2"></i>
+                                        {{ message.subject }}
+                                    </h5>
+                                    <small>{{ message.timestamp }}</small>
+                                </div>
+                                <p class="mb-1">To: {{ message.recipient_name }}</p>
+                                <small class="text-muted">Click to view full message</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted">No sent messages</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

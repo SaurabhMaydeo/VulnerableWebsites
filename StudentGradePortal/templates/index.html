@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row align-items-center">
+    <div class="col-md-6">
+        <h1 class="display-4 fw-bold">Welcome to Student Grade Portal</h1>
+        <p class="lead">Your comprehensive academic management system for students and faculty.</p>
+        <p class="mb-4">Access your grades, communicate with professors, and manage your academic profile all in one place.</p>
+        
+        {% if not session.user_id %}
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+            </a>
+        </div>
+        {% else %}
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <img src="https://source.unsplash.com/random/600x400/?university,student" class="img-fluid rounded shadow-lg" alt="University image">
+    </div>
+</div>
+
+<div class="row mt-5 pt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-card-checklist text-primary" style="font-size: 2.5rem;"></i>
+                <h3 class="card-title mt-3">Grade Access</h3>
+                <p class="card-text">View your grades securely across all your courses. Download grade reports when needed.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-envelope-paper text-primary" style="font-size: 2.5rem;"></i>
+                <h3 class="card-title mt-3">Communication</h3>
+                <p class="card-text">Easily send and receive messages from your professors about your academic progress.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-person-lines-fill text-primary" style="font-size: 2.5rem;"></i>
+                <h3 class="card-title mt-3">Profile Management</h3>
+                <p class="card-text">Keep your contact information updated to stay connected with important university notifications.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

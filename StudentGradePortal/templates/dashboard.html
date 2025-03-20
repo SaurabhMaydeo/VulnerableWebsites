@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Student Grade Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="display-5 mb-4">Welcome, {{ user.username }}</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Profile Overview</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email or 'Not set' }}</p>
+                <p><strong>Phone:</strong> {{ user.phone or 'Not set' }}</p>
+                <p><strong>Role:</strong> <span class="badge bg-info">{{ user.role }}</span></p>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('profile') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil-square me-2"></i>Manage Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if user.role == 'student' %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Recent Grades</h5>
+            </div>
+            <div class="card-body">
+                {% if grades %}
+                <div class="list-group">
+                    {% for grade in grades[:3] %}
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ grade.code }} - {{ grade.name }}</h6>
+                            <span class="badge bg-primary">{{ grade.grade }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if grades|length > 3 %}
+                <p class="text-muted mt-2">Showing 3 of {{ grades|length }} grades</p>
+                {% endif %}
+                {% else %}
+                <p class="text-muted">No grades available</p>
+                {% endif %}
+                <div class="d-grid gap-2 mt-3">
+                    <a href="{{ url_for('grades') }}" class="btn btn-outline-success">
+                        <i class="bi bi-card-list me-2"></i>View All Grades
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="bi bi-envelope me-2"></i>Messages</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    {% if unread_messages_count > 0 %}
+                    <strong>You have {{ unread_messages_count }} unread messages!</strong>
+                    {% else %}
+                    <span class="text-muted">No new messages</span>
+                    {% endif %}
+                </p>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('messages') }}" class="btn btn-outline-warning">
+                        <i class="bi bi-envelope-paper me-2"></i>View Messages
+                    </a>
+                    <a href="{{ url_for('new_message') }}" class="btn btn-outline-warning">
+                        <i class="bi bi-pencil me-2"></i>New Message
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Recent Announcements</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h5 class="alert-heading">End of Semester Approaching</h5>
+                    <p>The end of the semester is coming up. Please make sure to complete all assignments and check your grades.</p>
+                    <hr>
+                    <p class="mb-0">Final exams will begin on May 15th. Review the exam schedule on the university website.</p>
+                </div>
+                <div class="alert alert-warning">
+                    <h5 class="alert-heading">System Maintenance</h5>
+                    <p>The Student Grade Portal will be unavailable for scheduled maintenance this Saturday from 2am to 4am.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

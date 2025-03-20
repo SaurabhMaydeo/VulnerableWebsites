@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}VulnVote - Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded">
+    <h1 class="display-4">Welcome to VulnVote</h1>
+    <p class="lead">
+        A simple and straightforward polling platform where you can create polls and collect votes.
+    </p>
+
+    <hr class="my-4">
+    <p>Get started by browsing existing polls or create your own!</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('create_poll') }}">
+        <i class="fas fa-plus-circle me-2"></i>Create a New Poll
+    </a>
+</div>
+
+<h2 class="mt-5 mb-4">
+    <i class="fas fa-list me-2"></i>Active Polls
+</h2>
+
+{% if polls %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for poll in polls %}
+            <div class="col">
+                <div class="card h-100 poll-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ poll['title'] }}</h5>
+                        <p class="card-text text-muted">{{ poll['description'] }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <a href="{{ url_for('view_poll', poll_id=poll['id']) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-vote-yea me-1"></i>Vote
+                        </a>
+                        <a href="{{ url_for('results', poll_id=poll['id']) }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-chart-bar me-1"></i>Results
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>There are no active polls currently. Be the first to create one!
+    </div>
+{% endif %}
+{% endblock %}

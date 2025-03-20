@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ poll['title'] }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">{{ poll['title'] }}</h3>
+    </div>
+    <div class="card-body">
+        <p class="lead">{{ poll['description'] }}</p>
+        
+
+
+        <form id="vote-form" method="POST" action="{{ url_for('vote') }}">
+            <input type="hidden" name="poll_id" value="{{ poll['id'] }}">
+            
+            <div class="vote-options">
+                {% for option in options %}
+                    <div class="vote-option" onclick="selectOption(this, {{ option['id'] }})">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="option_id" id="option_{{ option['id'] }}" value="{{ option['id'] }}">
+                            <label class="form-check-label" for="option_{{ option['id'] }}">
+                                {{ option['text'] }}
+                            </label>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary" id="submit-vote">
+                    <i class="fas fa-vote-yea me-2"></i>Cast Your Vote
+                </button>
+                <a href="{{ url_for('results', poll_id=poll['id']) }}" class="btn btn-outline-secondary ms-2">
+                    <i class="fas fa-chart-bar me-1"></i>View Results
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="card-footer text-muted">
+        <div class="small">
+            <i class="fas fa-info-circle me-1"></i>
+            This poll was created on {{ poll['created_at'] }}
+        </div>
+        {% if poll['is_active'] == 1 %}
+            <form method="POST" action="{{ url_for('close_poll', poll_id=poll['id']) }}" class="mt-2">
+                <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-lock me-1"></i>Close Poll
+                </button>
+            </form>
+        {% else %}
+            <div class="badge bg-secondary mt-2">This poll is closed</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-code me-2"></i>For Developers - API Endpoint</h5>
+    </div>
+    <div class="card-body">
+        <p>You can also vote using our insecure API endpoint:</p>
+        <pre class="bg-light p-3 rounded"><code>POST /api/vote
+Content-Type: application/json
+
+{
+  "poll_id": {{ poll['id'] }},
+  "option_id": &lt;OPTION_ID&gt;
+}</code></pre>
+        <p class="text-danger">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            <strong>Warning:</strong> This API does not use authentication or rate limiting.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function selectOption(element, optionId) {
+        // Clear previous selections
+        document.querySelectorAll('.vote-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        // Select this option
+        element.classList.add('selected');
+        document.getElementById('option_' + optionId).checked = true;
+    }
+    
+    document.getElementById('vote-form').addEventListener('submit', function(e) {
+        if (!document.querySelector('input[name="option_id"]:checked')) {
+            e.preventDefault();
+            alert('Please select an option to vote!');
+        }
+    });
+</script>
+{% endblock %}

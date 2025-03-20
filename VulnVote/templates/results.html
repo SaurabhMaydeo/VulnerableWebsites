@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Results: {{ poll['title'] }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">{{ poll['title'] }} - Results</h3>
+        <span class="badge bg-light text-dark">
+            <i class="fas fa-chart-bar me-1"></i>Live Results
+        </span>
+    </div>
+    <div class="card-body">
+        <p class="lead">{{ poll['description'] }}</p>
+        
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            Results are updated in real-time without any authentication. 
+            This demonstrates how unprotected data endpoints can be monitored by attackers.
+        </div>
+        
+        <div class="results-container my-4">
+            {% set total_votes = namespace(value=0) %}
+            {% for option in options %}
+                {% set total_votes.value = total_votes.value + option['votes'] %}
+            {% endfor %}
+            
+            {% for option in options %}
+                {% if total_votes.value > 0 %}
+                    {% set percentage = (option['votes'] / total_votes.value * 100) | round %}
+                {% else %}
+                    {% set percentage = 0 %}
+                {% endif %}
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>{{ option['text'] }}</span>
+                        <span>
+                            <strong>{{ option['votes'] }} votes</strong>
+                            ({{ percentage }}%)
+                        </span>
+                    </div>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ percentage }}%" 
+                             aria-valuenow="{{ percentage }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ percentage }}%
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <div class="text-center mt-4">
+                <p class="text-muted">Total votes: {{ total_votes.value }}</p>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ url_for('view_poll', poll_id=poll['id']) }}" class="btn btn-outline-primary">
+                <i class="fas fa-vote-yea me-1"></i>Back to Voting
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-home me-1"></i>Back to Polls
+            </a>
+        </div>
+    </div>
+    
+    <div class="card-footer text-muted">
+        <div class="small">
+            <i class="fas fa-info-circle me-1"></i>
+            This poll was created on {{ poll['created_at'] }}
+        </div>
+        {% if poll['is_active'] == 1 %}
+            <div class="badge bg-success mt-2">Active</div>
+        {% else %}
+            <div class="badge bg-secondary mt-2">Closed</div>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Automatically refresh results every 5 seconds
+setInterval(function() {
+    fetch('/api/vote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'poll_id': {{ poll['id'] }},
+            'option_id': null  // Just getting results, not voting
+        })
+    })
+    .then(function(response) { 
+        return response.json(); 
+    })
+    .then(function(data) {
+        if (data.success) {
+            // Update results display (in a real app)
+            console.log("Updated poll results:", data.results);
+            // We would update the UI here in a real implementation
+        }
+    })
+    .catch(function(error) { 
+        console.error('Error refreshing results:', error); 
+    });
+}, 5000);
+</script>
+{% endblock %}

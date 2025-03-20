@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Create a New Poll{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Create a New Poll</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('create_poll') }}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Poll Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Options</label>
+                        <div id="options-container">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="options" placeholder="Option 1" required>
+                            </div>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="options" placeholder="Option 2" required>
+                            </div>
+                        </div>
+                        <button type="button" id="add-option" class="btn btn-sm btn-outline-secondary mt-2">
+                            <i class="fas fa-plus me-1"></i>Add Another Option
+                        </button>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check-circle me-2"></i>Create Poll
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('add-option').addEventListener('click', function() {
+        const optionsContainer = document.getElementById('options-container');
+        const optionCount = optionsContainer.children.length;
+        
+        const newOption = document.createElement('div');
+        newOption.className = 'input-group mb-2';
+        newOption.innerHTML = `
+            <input type="text" class="form-control" name="options" placeholder="Option ${optionCount + 1}">
+            <button class="btn btn-outline-danger remove-option" type="button">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        optionsContainer.appendChild(newOption);
+        
+        // Add event listener to the remove button
+        newOption.querySelector('.remove-option').addEventListener('click', function() {
+            optionsContainer.removeChild(newOption);
+        });
+    });
+</script>
+{% endblock %}

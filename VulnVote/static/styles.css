@@ -1,0 +1,84 @@
+/* Additional styles for VulnVote application */
+
+/* Custom styles for the app that extend Bootstrap */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+/* Poll cards styling */
+.poll-card {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+.poll-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Voting options styling */
+.vote-option {
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vote-option:hover {
+    background-color: #f8f9fa;
+}
+
+.vote-option.selected {
+    background-color: #e9ecef;
+    border-color: #007bff;
+}
+
+/* Progress bars in results */
+.progress {
+    height: 30px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.progress-bar {
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: 600;
+}
+
+/* API documentation styling */
+pre {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    overflow-x: auto;
+}
+
+code {
+    color: #d63384;
+}
+
+/* Warning banners */
+.warning-banner {
+    background-color: #fff3cd;
+    color: #664d03;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}

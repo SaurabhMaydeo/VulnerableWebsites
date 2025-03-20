@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TechHive</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Tech<span>Hive</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="#">My Courses</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">Resources</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="users.html" id="users-nav-link" style="display: none;">Users</a></li>
+                <li><a href="#" id="logout-btn" class="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="dashboard-container">
+        <div class="dashboard-sidebar">
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 id="user-displayname">Welcome</h3>
+                <p id="user-role">Member</p>
+                <div class="user-details">
+                    <small>User ID: <span id="user-id">0</span></small>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="#"><i class="fas fa-calendar"></i> Events</a></li>
+                <li><a href="#"><i class="fas fa-bookmark"></i> Bookmarks</a></li>
+                <li><a href="#"><i class="fas fa-certificate"></i> Certificates</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li id="users-sidebar-link" style="display: none;"><a href="users.html"><i class="fas fa-user-cog"></i> User Management</a></li>
+            </ul>
+        </div>
+        <div class="dashboard-content">
+            <div class="dashboard-header">
+                <h2>My Dashboard</h2>
+                <div class="dashboard-actions">
+                    <button class="action-btn"><i class="fas fa-bell"></i></button>
+                    <button class="action-btn"><i class="fas fa-envelope"></i></button>
+                    <div class="user-menu">
+                        <button class="action-btn" id="user-menu-btn"><i class="fas fa-user"></i></button>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <a href="#"><i class="fas fa-user-cog"></i> Profile</a>
+                            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+                            <a href="#" id="dropdown-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-book"></i></div>
+                    <div class="stat-details">
+                        <h3>Courses</h3>
+                        <p>12</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-certificate"></i></div>
+                    <div class="stat-details">
+                        <h3>Certificates</h3>
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-details">
+                        <h3>Connections</h3>
+                        <p>47</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-star"></i></div>
+                    <div class="stat-details">
+                        <h3>Points</h3>
+                        <p>1,247</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Panel - Only visible to admin role -->
+            <!-- Admin Banner - Only visible to Admin users through role-based authorization -->
+            <div id="admin-banner" class="admin-banner" style="display: none;">
+                <strong>⚠️ ADMIN MODE ACTIVE ⚠️</strong> - You have elevated privileges. Be careful with system changes.
+            </div>
+
+            <!-- Admin Panel - Only visible to Admin users through role-based authorization -->
+            <div id="admin-panel" class="dashboard-section admin-panel" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-shield-alt"></i> Admin Controls</h3>
+                </div>
+                <div class="admin-controls">
+                    <div class="admin-card">
+                        <h4>User Management</h4>
+                        <p>Total Users: 24</p>
+                        <a href="users.html"><button class="admin-btn">Manage Users</button></a>
+                    </div>
+                    <div class="admin-card">
+                        <h4>Content Moderation</h4>
+                        <p>Pending Reviews: 5</p>
+                        <button class="admin-btn">Review Content</button>
+                    </div>
+                    <div class="admin-card">
+                        <h4>System Status</h4>
+                        <p>All Systems Operational</p>
+                        <button class="admin-btn">View Logs</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Premium Features - Only visible to users with ID 1 -->
+            <div id="premium-features" class="dashboard-section premium-features" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-crown"></i> Premium Features</h3>
+                </div>
+                <div class="premium-content">
+                    <div class="premium-card">
+                        <h4>Advanced Analytics</h4>
+                        <p>Access detailed insights about your learning journey</p>
+                        <button class="premium-btn">View Analytics</button>
+                    </div>
+                    <div class="premium-card">
+                        <h4>1-on-1 Mentoring</h4>
+                        <p>Schedule sessions with industry experts</p>
+                        <button class="premium-btn">Book Session</button>
+                    </div>
+                    <div class="premium-card">
+                        <h4>Exclusive Workshops</h4>
+                        <p>Join specialized technical workshops</p>
+                        <button class="premium-btn">Browse Workshops</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Regular Dashboard Sections -->
+            <div class="dashboard-sections">
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h3>In Progress Courses</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="course-cards">
+                        <div class="course-card">
+                            <div class="course-progress">75%</div>
+                            <h4>Advanced JavaScript</h4>
+                            <p>Complete advanced concepts in JavaScript programming.</p>
+                            <button class="continue-btn">Continue</button>
+                        </div>
+                        <div class="course-card">
+                            <div class="course-progress">40%</div>
+                            <h4>React.js Fundamentals</h4>
+                            <p>Learn the basics of building web applications with React.</p>
+                            <button class="continue-btn">Continue</button>
+                        </div>
+                        <div class="course-card">
+                            <div class="course-progress">10%</div>
+                            <h4>Cloud Computing</h4>
+                            <p>Introduction to cloud services and architecture.</p>
+                            <button class="continue-btn">Continue</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h3>Upcoming Events</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="events-list">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">15</span>
+                                <span class="month">Apr</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>Web Development Hackathon</h4>
+                                <p><i class="fas fa-clock"></i> 09:00 AM - 05:00 PM</p>
+                                <p><i class="fas fa-map-marker-alt"></i> Virtual Event</p>
+                            </div>
+                            <button class="event-btn">Join</button>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">22</span>
+                                <span class="month">Apr</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>Introduction to Machine Learning</h4>
+                                <p><i class="fas fa-clock"></i> 06:00 PM - 08:00 PM</p>
+                                <p><i class="fas fa-map-marker-alt"></i> Virtual Event</p>
+                            </div>
+                            <button class="event-btn">Join</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h3>Community Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <div class="activity-feed">
+                    <div class="activity-item">
+                        <div class="activity-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Sarah Chen</strong> posted a new article: "Understanding Async/Await in JavaScript"</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Michael Rodriguez</strong> commented on your question about React Hooks</p>
+                            <span class="activity-time">5 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Jessica Taylor</strong> shared a resource: "Top 10 VS Code Extensions for Web Developers"</p>
+                            <span class="activity-time">Yesterday</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Management Section - Only visible to Admin role -->
+            <div id="user-management" class="dashboard-section" style="display: none;">
+                <div class="section-header">
+                    <h3>User Management</h3>
+                    <button class="add-user-btn"><i class="fas fa-plus"></i> Add User</button>
+                </div>
+                <div class="user-table-container">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>admin</td>
+                                <td>admin@techhive.com</td>
+                                <td>Admin</td>
+                                <td>
+                                    <button class="table-btn edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-btn delete-btn"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>john</td>
+                                <td>john@example.com</td>
+                                <td>Member</td>
+                                <td>
+                                    <button class="table-btn edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-btn delete-btn"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>sarah</td>
+                                <td>sarah@example.com</td>
+                                <td>Member</td>
+                                <td>
+                                    <button class="table-btn edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-btn delete-btn"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Member-only content -->
+            <div id="member-only-content" class="dashboard-section">
+                <div class="section-header">
+                    <h3>Exclusive Content</h3>
+                </div>
+                <div class="exclusive-content">
+                    <p>This content is only visible to registered members.</p>
+                    <div class="content-cards">
+                        <div class="content-card">
+                            <h4>Latest Tech Trends</h4>
+                            <p>An in-depth analysis of emerging technologies in 2025</p>
+                            <button class="content-btn">Read Now</button>
+                        </div>
+                        <div class="content-card">
+                            <h4>Career Development</h4>
+                            <p>Strategies for advancing your tech career</p>
+                            <button class="content-btn">Explore</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TechHive. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

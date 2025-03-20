@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - TechHive</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Tech<span>Hive</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="#">My Courses</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">Resources</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="users.html" class="active">Users</a></li>
+                <li><a href="#" id="logout-btn" class="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="dashboard-container">
+        <div class="dashboard-sidebar">
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 id="user-displayname">Welcome</h3>
+                <p id="user-role">Member</p>
+                <div class="user-details">
+                    <small>User ID: <span id="user-id">0</span></small>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="#"><i class="fas fa-calendar"></i> Events</a></li>
+                <li><a href="#"><i class="fas fa-bookmark"></i> Bookmarks</a></li>
+                <li><a href="#"><i class="fas fa-certificate"></i> Certificates</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li class="active"><a href="users.html"><i class="fas fa-user-cog"></i> User Management</a></li>
+            </ul>
+        </div>
+        <div class="dashboard-content">
+            <div class="dashboard-header">
+                <h2>User Management</h2>
+                <div class="dashboard-actions">
+                    <button class="action-btn"><i class="fas fa-bell"></i></button>
+                    <button class="action-btn"><i class="fas fa-envelope"></i></button>
+                    <div class="user-menu">
+                        <button class="action-btn" id="user-menu-btn"><i class="fas fa-user"></i></button>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <a href="#"><i class="fas fa-user-cog"></i> Profile</a>
+                            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+                            <a href="#" id="dropdown-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="users-container">
+                <div class="users-header">
+                    <div class="users-actions">
+                        <button class="add-user-btn" id="add-user-btn">
+                            <i class="fas fa-plus"></i> Add New User
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="user-search" placeholder="Search users...">
+                            <button type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="user-filters">
+                        <select id="role-filter">
+                            <option value="all">All Roles</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Member">Member</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="user-table-container">
+                    <table class="user-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- User rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- User Modal -->
+            <div class="modal" id="user-modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3 id="modal-title">Add New User</h3>
+                    <form id="user-form">
+                        <input type="hidden" id="user-id-input">
+                        <div class="form-group">
+                            <label for="user-username">Username</label>
+                            <input type="text" id="user-username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-email">Email</label>
+                            <input type="email" id="user-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-password">Password</label>
+                            <input type="password" id="user-password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-role">Role</label>
+                            <select id="user-role" name="role">
+                                <option value="Member">Member</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="save-user-btn">Save User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TechHive. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if current user is an Admin
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (currentUser && currentUser.role !== 'Admin') {
+                // Redirect non-admin users to dashboard
+                alert('You do not have permission to access the User Management page.');
+                window.location.href = 'dashboard.html';
+            }
+            
+            // Get users from localStorage
+            const defaultUsers = [
+                { id: 1, username: 'admin', email: 'admin@techhive.com', password: 'admin123', role: 'Admin' },
+                { id: 2, username: 'john', email: 'john@example.com', password: 'john2023', role: 'Member' },
+                { id: 3, username: 'sarah', email: 'sarah@example.com', password: 'sarah123', role: 'Member' }
+            ];
+            
+            // Initialize users in localStorage if not exist
+            if (!localStorage.getItem('usersList')) {
+                localStorage.setItem('usersList', JSON.stringify(defaultUsers));
+            }
+            
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            const usersList = JSON.parse(localStorage.getItem('usersList')) || [];
+            
+            // Combine default users and registered users
+            const allUsers = [...usersList];
+            
+            // Add registered users if they don't already exist in the list
+            registeredUsers.forEach(regUser => {
+                if (!allUsers.some(u => u.username === regUser.username)) {
+                    allUsers.push(regUser);
+                }
+            });
+            
+            // Display users in the table
+            displayUsers(allUsers);
+            
+            // Handle search
+            const searchInput = document.getElementById('user-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    filterUsers();
+                });
+            }
+            
+            // Handle role filter
+            const roleFilter = document.getElementById('role-filter');
+            if (roleFilter) {
+                roleFilter.addEventListener('change', function() {
+                    filterUsers();
+                });
+            }
+            
+            function filterUsers() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const roleValue = roleFilter.value;
+                
+                const filteredUsers = allUsers.filter(user => {
+                    const matchesSearch = 
+                        user.username.toLowerCase().includes(searchTerm) ||
+                        (user.email && user.email.toLowerCase().includes(searchTerm));
+                    
+                    const matchesRole = roleValue === 'all' || user.role === roleValue;
+                    
+                    return matchesSearch && matchesRole;
+                });
+                
+                displayUsers(filteredUsers);
+            }
+            
+            // Handle add user button
+            const addUserBtn = document.getElementById('add-user-btn');
+            const userModal = document.getElementById('user-modal');
+            const closeModal = document.querySelector('.close-modal');
+            
+            if (addUserBtn && userModal) {
+                addUserBtn.addEventListener('click', function() {
+                    document.getElementById('modal-title').textContent = 'Add New User';
+                    document.getElementById('user-form').reset();
+                    document.getElementById('user-id-input').value = '';
+                    userModal.style.display = 'block';
+                });
+            }
+            
+            if (closeModal) {
+                closeModal.addEventListener('click', function() {
+                    userModal.style.display = 'none';
+                });
+            }
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === userModal) {
+                    userModal.style.display = 'none';
+                }
+            });
+            
+            // Handle user form submission
+            const userForm = document.getElementById('user-form');
+            if (userForm) {
+                userForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const userId = document.getElementById('user-id-input').value;
+                    const username = document.getElementById('user-username').value;
+                    const email = document.getElementById('user-email').value;
+                    const password = document.getElementById('user-password').value;
+                    const role = document.getElementById('user-role').value;
+                    
+                    if (userId) {
+                        // Update existing user
+                        const userIndex = allUsers.findIndex(u => u.id === parseInt(userId));
+                        if (userIndex !== -1) {
+                            allUsers[userIndex] = {
+                                ...allUsers[userIndex],
+                                username,
+                                email,
+                                password,
+                                role
+                            };
+                        }
+                    } else {
+                        // Add new user - find highest ID and add 1
+                        const newId = allUsers.length > 0 ? Math.max(...allUsers.map(u => parseInt(u.id) || 0)) + 1 : 1;
+                        
+                        allUsers.push({
+                            id: newId,
+                            username,
+                            email,
+                            password,
+                            role
+                        });
+                    }
+                    
+                    // Save to localStorage
+                    localStorage.setItem('usersList', JSON.stringify(allUsers));
+                    
+                    // Update display
+                    displayUsers(allUsers);
+                    
+                    // Close modal
+                    userModal.style.display = 'none';
+                });
+            }
+            
+            // Function to display users in the table
+            function displayUsers(users) {
+                const tableBody = document.getElementById('users-table-body');
+                if (!tableBody) return;
+                
+                tableBody.innerHTML = '';
+                
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email || 'N/A'}</td>
+                        <td>${user.role}</td>
+                        <td>
+                            <button class="table-btn edit-btn" data-id="${user.id}"><i class="fas fa-edit"></i></button>
+                            <button class="table-btn delete-btn" data-id="${user.id}"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+                
+                // Set up edit buttons
+                const editButtons = document.querySelectorAll('.edit-btn');
+                editButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const userId = this.getAttribute('data-id');
+                        const user = allUsers.find(u => u.id === parseInt(userId));
+                        
+                        if (user) {
+                            document.getElementById('modal-title').textContent = 'Edit User';
+                            document.getElementById('user-id-input').value = user.id;
+                            document.getElementById('user-username').value = user.username;
+                            document.getElementById('user-email').value = user.email || '';
+                            document.getElementById('user-password').value = user.password || '';
+                            document.getElementById('user-role').value = user.role;
+                            
+                            userModal.style.display = 'block';
+                        }
+                    });
+                });
+                
+                // Set up delete buttons
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+                deleteButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const userId = this.getAttribute('data-id');
+                        
+                        if (confirm('Are you sure you want to delete this user?')) {
+                            const userIndex = allUsers.findIndex(u => u.id === parseInt(userId));
+                            
+                            if (userIndex !== -1) {
+                                // Do not allow deleting the current user
+                                if (allUsers[userIndex].id === currentUser.id) {
+                                    alert('You cannot delete your own account while logged in.');
+                                    return;
+                                }
+                                
+                                allUsers.splice(userIndex, 1);
+                                
+                                // Save to localStorage
+                                localStorage.setItem('usersList', JSON.stringify(allUsers));
+                                
+                                // Update display
+                                displayUsers(allUsers);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

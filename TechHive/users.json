@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "admin123", 
+      "email": "admin@techhive.com",
+      "role": "Admin"
+    },
+    {
+      "username": "john",
+      "password": "john2023",
+      "email": "john@example.com",
+      "role": "Member"
+    },
+    {
+      "username": "sarah",
+      "password": "sarah123",
+      "email": "sarah@example.com",
+      "role": "Member"
+    }
+  ]
+}

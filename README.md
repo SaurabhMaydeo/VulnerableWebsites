@@ -13,14 +13,17 @@ An e-commerce website with intentional XSS vulnerabilities in search functionali
   - Cross-Site Scripting (XSS) in search boxes
   - Unsanitized user input
   - Direct DOM manipulation
+  - 
 
 ### 2. StudentGradePortal
 An academic portal where students can check their grades, change profile details, and send messages to professors.
 
 - **Vulnerabilities:**
-  - Cross-Site Request Forgery (CSRF) in profile update functions
-  - No anti-CSRF tokens in forms
-  - No referrer or origin checking
+- Cross-Site Scripting 
+- Cross-Site Request Forgery 
+- SQL Injection
+- Man in the Middle
+- Broken Authentication
 
 ## Disclaimer
 

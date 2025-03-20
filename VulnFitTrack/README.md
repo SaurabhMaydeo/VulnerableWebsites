@@ -1,6 +1,14 @@
 # VulnFitTrack - Fitness Tracker Website
 
-VulnFitTrack is a professional fitness tracking web application built for educational purposes. 
+VulnFitTrack is a professional fitness tracking web application built for educational purposes.
+
+## Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Activities Page
+![Activities](screenshots/activities.png) 
 
 ## Warning
 

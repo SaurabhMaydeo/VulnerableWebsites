@@ -1,0 +1,82 @@
+/* Custom styles for ProfilePulse */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+}
+
+.card {
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.btn {
+    border-radius: 0.25rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #0e76a8;
+    border-color: #0e76a8;
+}
+
+.btn-primary:hover {
+    background-color: #0a5d87;
+    border-color: #0a5d87;
+}
+
+.form-control {
+    border-radius: 0.25rem;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(14, 118, 168, 0.25);
+    border-color: #0e76a8;
+}
+
+footer {
+    margin-top: 2rem;
+    color: #6c757d;
+}
+
+/* Dashboard styles */
+.profile-header {
+    background-color: #ffffff;
+    padding: 2rem 0;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Custom avatar style */
+.avatar-lg {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}

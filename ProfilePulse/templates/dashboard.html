@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - ProfilePulse{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <img src="{{ url_for('static', filename='img/default-avatar.png') }}" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px;">
+                </div>
+                <h5 class="card-title">{{ g.user['full_name'] }}</h5>
+                <p class="text-muted">@{{ g.user['username'] }}</p>
+                <p class="card-text">{{ g.user['bio'] }}</p>
+                <a href="{{ url_for('profile') }}" class="btn btn-outline-primary">Edit Profile</a>
+            </div>
+        </div>
+
+        {% if connections %}
+        <div class="card mb-4">
+            <div class="card-header">
+                Connection Requests
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for connection in connections %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ connection['full_name'] }}</strong>
+                            <div class="text-muted small">@{{ connection['username'] }}</div>
+                        </div>
+                        <div>
+                            <form method="post" action="{{ url_for('handle_connection') }}" class="d-inline">
+                                <input type="hidden" name="connection_id" value="{{ connection['id'] }}">
+                                <input type="hidden" name="action" value="accept">
+                                <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                            </form>
+                            <form method="post" action="{{ url_for('handle_connection') }}" class="d-inline">
+                                <input type="hidden" name="connection_id" value="{{ connection['id'] }}">
+                                <input type="hidden" name="action" value="reject">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="post" action="{{ url_for('create_post') }}">
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Share a post</label>
+                        <textarea class="form-control" id="content" name="content" rows="3" placeholder="What's on your mind?"></textarea>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <h4 class="mb-3">Your Posts</h4>
+        {% if posts %}
+            {% for post in posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ url_for('static', filename='img/default-avatar.png') }}" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                            <div>
+                                <h6 class="mb-0">{{ g.user['full_name'] }}</h6>
+                                <small class="text-muted">{{ post['created_at'] }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-text">{{ post['content'] }}</p>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary"><i class="far fa-thumbs-up me-1"></i>Like</button>
+                            <button class="btn btn-sm btn-outline-primary ms-2"><i class="far fa-comment me-1"></i>Comment</button>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-share me-1"></i>Share</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="alert alert-info">
+            You haven't created any posts yet. Share your thoughts above!
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

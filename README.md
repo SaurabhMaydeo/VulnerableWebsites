@@ -10,20 +10,17 @@ This repository contains intentionally vulnerable web applications for security 
 An e-commerce website with intentional XSS vulnerabilities in search functionality.
 
 - **Vulnerabilities:**
-  - Cross-Site Scripting (XSS) in search boxes
-  - Unsanitized user input
-  - Direct DOM manipulation
-  - 
-
-### 2. StudentGradePortal
-An academic portal where students can check their grades, change profile details, and send messages to professors.
-
-- **Vulnerabilities:**
 - Cross-Site Scripting 
 - Cross-Site Request Forgery 
 - SQL Injection
 - Man in the Middle
 - Broken Authentication
+  - 
+
+### 2. StudentGradePortal
+An academic portal where students can check their grades, change profile details, and send messages to professors.
+
+
 
 ## Disclaimer
 

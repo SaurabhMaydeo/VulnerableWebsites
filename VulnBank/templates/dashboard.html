@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}VulnBank - Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user.full_name }}!</h2>
+<p class="text-muted">Last login: [Unencrypted timestamp would be here]</p>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card bg-light mb-3">
+            <div class="card-header">Account Information</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ accounts.account_type }} Account</h5>
+                <p class="card-text">Account #: {{ accounts.account_number }}</p>
+                <h2 class="text-primary">${{ "%.2f"|format(accounts.balance) }}</h2>
+                <p class="card-text text-muted">Available Balance</p>
+                <div class="btn-group mt-3 w-100">
+                    <a href="{{ url_for('payment') }}" class="btn btn-outline-primary">Deposit</a>
+                    <a href="{{ url_for('transfer') }}" class="btn btn-outline-primary">Transfer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                Recent Transactions
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if transactions %}
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.date }}</td>
+                                <td>{{ transaction.description }}</td>
+                                <td>
+                                    {% if transaction.transaction_type == 'deposit' %}
+                                        <span class="badge badge-success">Deposit</span>
+                                    {% elif transaction.transaction_type == 'withdrawal' %}
+                                        <span class="badge badge-danger">Withdrawal</span>
+                                    {% elif transaction.transaction_type == 'transfer_in' %}
+                                        <span class="badge badge-info">Transfer In</span>
+                                    {% elif transaction.transaction_type == 'transfer_out' %}
+                                        <span class="badge badge-warning">Transfer Out</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if transaction.transaction_type in ['deposit', 'transfer_in'] %}
+                                        <span class="text-success">+${{ "%.2f"|format(transaction.amount) }}</span>
+                                    {% else %}
+                                        <span class="text-danger">-${{ "%.2f"|format(transaction.amount) }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">No recent transactions</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('payment') }}" class="btn btn-outline-primary btn-block">
+                            Make a Payment
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('transfer') }}" class="btn btn-outline-primary btn-block">
+                            Transfer Funds
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-primary btn-block" id="fetchAccountDetails">
+                            View Account Details
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('profile') }}" class="btn btn-outline-primary btn-block">
+                            Update Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for account details -->
+<div class="modal fade" id="accountDetailsModal" tabindex="-1" role="dialog" aria-labelledby="accountDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accountDetailsModalLabel">Account Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="accountDetailsBody">
+                Loading...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Insecure JavaScript that fetches account details over HTTP
+    document.getElementById('fetchAccountDetails').addEventListener('click', function() {
+        $('#accountDetailsModal').modal('show');
+        
+        fetch('/api/account-details')
+            .then(response => response.json())
+            .then(data => {
+                let html = `
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Account Number:</th>
+                            <td>${data.account_number}</td>
+                        </tr>
+                        <tr>
+                            <th>Account Type:</th>
+                            <td>${data.account_type}</td>
+                        </tr>
+                        <tr>
+                            <th>Current Balance:</th>
+                            <td>$${data.balance.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <th>Created Date:</th>
+                            <td>${data.created_at}</td>
+                        </tr>
+                    </table>
+                `;
+                document.getElementById('accountDetailsBody').innerHTML = html;
+            })
+            .catch(error => {
+                document.getElementById('accountDetailsBody').innerHTML = 'Error loading account details.';
+                console.error('Error:', error);
+            });
+    });
+</script>
+{% endblock %}

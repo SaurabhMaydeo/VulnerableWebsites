@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}VulnBank - Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Your Profile</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="form-group row">
+                        <label for="username" class="col-sm-3 col-form-label">Username</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control-plaintext" id="username" value="{{ user.username }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="full_name" class="col-sm-3 col-form-label">Full Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="full_name" name="full_name" value="{{ user.full_name }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="email" class="col-sm-3 col-form-label">Email Address</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="created_at" class="col-sm-3 col-form-label">Member Since</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control-plaintext" id="created_at" value="{{ user.created_at }}" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Security Information</h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">Change your password to improve account security.</p>
+                <form method="post">
+                    <div class="form-group">
+                        <label for="current_password">Current Password</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}VulnBank - Make a Payment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Make a Payment</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" id="paymentForm">
+                    <div class="form-group">
+                        <label for="account">Account to Credit</label>
+                        <input type="text" class="form-control" id="account" value="{{ accounts.account_number }} (Balance: ${{ "%.2f"|format(accounts.balance) }})" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="amount">Amount to Deposit</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="number" class="form-control" id="amount" name="amount" min="1" step="0.01" required>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    <h5>Payment Method</h5>
+                    
+                    <div class="form-group">
+                        <label for="card_number">Credit Card Number</label>
+                        <input type="text" class="form-control" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="card_holder">Cardholder Name</label>
+                            <input type="text" class="form-control" id="card_holder" name="card_holder" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="expiry_date">Expiry Date</label>
+                            <input type="text" class="form-control" id="expiry_date" name="expiry_date" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="cvv">CVV</label>
+                            <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="save_card" name="save_card">
+                        <label class="form-check-label" for="save_card">Save card for future payments</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Process Payment</button>
+                </form>
+            </div>
+        </div>
+        
+
+    </div>
+</div>
+
+<script>
+    // Payment form handling
+    document.getElementById('paymentForm').addEventListener('submit', function(event) {
+        // No validation of card details
+        // Data will be sent in plaintext over HTTP
+        console.log('Processing payment...');
+        // No encryption or tokenization of card data
+    });
+</script>
+{% endblock %}

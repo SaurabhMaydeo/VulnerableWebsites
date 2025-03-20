@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}VulnBank - Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Welcome to VulnBank</h1>
+    <p class="lead">Your Insecure Banking Solution</p>
+    <hr class="my-4">
+    <p>Experience our "top-notch" banking services with "state-of-the-art" security!</p>
+    {% if 'user_id' not in session %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('login') }}" role="button">Login Now</a>
+    {% else %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard') }}" role="button">Go to Dashboard</a>
+    {% endif %}
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Online Banking</h5>
+                <p class="card-text">Access your accounts 24/7 from anywhere. View balances, make transfers, and manage your money online.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Easy Payments</h5>
+                <p class="card-text">Make payments to anyone, anytime with our simple and "secure" payment processing system.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Personal Finance</h5>
+                <p class="card-text">Track your spending, set budgets, and achieve your financial goals with our tools.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

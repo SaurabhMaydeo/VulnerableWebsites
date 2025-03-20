@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - VulnFitTrack{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('activities') }}">
+                            <i class="fas fa-running me-2"></i>Activities
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('add_activity') }}">
+                            <i class="fas fa-plus-circle me-2"></i>Add Activity
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('profile') }}">
+                            <i class="fas fa-user me-2"></i>Profile
+                        </a>
+                    </li>
+                    {% if session.get('role') == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin') }}">
+                            <i class="fas fa-user-shield me-2"></i>Admin Panel
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <a href="{{ url_for('add_activity') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i>Add New Activity
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Summary Stats -->
+            <div class="row g-4 dashboard-stats">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3>{{ weekly_stats.total_calories or 0 }}</h3>
+                        <p>Weekly Calories Burned</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>{{ weekly_stats.total_duration or 0 }} min</h3>
+                        <p>Weekly Activity Duration</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <h3>{{ activity_breakdown|length }}</h3>
+                        <p>Activity Types</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <h3>{{ user.fitness_goal or 'Not set' }}</h3>
+                        <p>Fitness Goal</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Weekly Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="weeklyChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Activity Breakdown</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="activityPieChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activities -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Activities</h5>
+                    <a href="{{ url_for('activities') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_activities %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Activity</th>
+                                        <th>Duration</th>
+                                        <th>Distance</th>
+                                        <th>Calories</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in recent_activities %}
+                                        <tr>
+                                            <td>{{ activity.date }}</td>
+                                            <td>{{ activity.activity_type }}</td>
+                                            <td>{{ activity.duration }} min</td>
+                                            <td>{% if activity.distance %}{{ activity.distance }} km{% else %}-{% endif %}</td>
+                                            <td>{{ activity.calories }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-3x mb-3 text-muted"></i>
+                            <p>No activities recorded yet.</p>
+                            <a href="{{ url_for('add_activity') }}" class="btn btn-primary">Add Your First Activity</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Weekly Activity Chart
+    const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+    const weeklyChart = new Chart(weeklyCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [{
+                label: 'Activity Minutes',
+                data: [30, 45, 0, 60, 20, 90, 45], // Sample data - would be replaced with real data
+                backgroundColor: '#4361ee',
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Minutes'
+                    }
+                }
+            }
+        }
+    });
+    
+    // Activity Breakdown Pie Chart
+    const pieCtx = document.getElementById('activityPieChart').getContext('2d');
+    const pieChart = new Chart(pieCtx, {
+        type: 'doughnut',
+        data: {
+            labels: [{% for item in activity_breakdown %}'{{ item.activity_type }}',{% endfor %}],
+            datasets: [{
+                data: [{% for item in activity_breakdown %}{{ item.count }},{% endfor %}],
+                backgroundColor: [
+                    '#4361ee',
+                    '#3a0ca3',
+                    '#7209b7',
+                    '#f72585',
+                    '#4cc9f0',
+                    '#06d6a0',
+                    '#ffd166'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

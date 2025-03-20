@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">Transform Your Fitness Journey</h1>
+        <p class="hero-text">Track your workouts, monitor your progress, and achieve your fitness goals with our comprehensive fitness tracking platform.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">Login</a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title text-center">Our Features</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Activity Tracking</h3>
+                    <p>Log and monitor your workouts with detailed metrics on distance, duration, calories burned, and more.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Personalized Dashboard</h3>
+                    <p>Get a comprehensive overview of your fitness journey with customizable widgets and progress charts.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="feature-title">Goal Setting</h3>
+                    <p>Set achievable fitness goals and track your progress toward meeting them with visual indicators.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h2 class="display-4 fw-bold text-primary">10K+</h2>
+                <p class="lead">Active Users</p>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h2 class="display-4 fw-bold text-primary">500K+</h2>
+                <p class="lead">Workouts Logged</p>
+            </div>
+            <div class="col-md-4">
+                <h2 class="display-4 fw-bold text-primary">98%</h2>
+                <p class="lead">Satisfied Users</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center">What Our Users Say</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <img src="https://randomuser.me/api/portraits/women/60.jpg" alt="User" class="rounded-circle" width="60">
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0">Sarah Johnson</h5>
+                                <p class="text-muted small">Fitness Enthusiast</p>
+                            </div>
+                        </div>
+                        <p class="card-text">"VulnFitTrack has completely transformed how I approach my fitness. The ability to track my runs and see my progress over time has been incredibly motivating!"</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="rounded-circle" width="60">
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0">Michael Chen</h5>
+                                <p class="text-muted small">Marathon Runner</p>
+                            </div>
+                        </div>
+                        <p class="card-text">"The detailed analytics and customizable dashboard have helped me optimize my training for marathons. I can easily see my pace improvements and training consistency."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <img src="https://randomuser.me/api/portraits/women/29.jpg" alt="User" class="rounded-circle" width="60">
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0">Emily Rodriguez</h5>
+                                <p class="text-muted small">Yoga Instructor</p>
+                            </div>
+                        </div>
+                        <p class="card-text">"As a yoga instructor, I love how I can track not just high-intensity workouts but also my yoga sessions. The interface is intuitive and the progress tracking is excellent!"</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="mb-4">Ready to Start Your Fitness Journey?</h2>
+        <p class="lead mb-4">Join thousands of users who have transformed their lives with VulnFitTrack.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Sign Up Now - It's Free!</a>
+    </div>
+</section>
+{% endblock %}

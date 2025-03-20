@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Activities - VulnFitTrack{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('activities') }}">
+                            <i class="fas fa-running me-2"></i>Activities
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('add_activity') }}">
+                            <i class="fas fa-plus-circle me-2"></i>Add Activity
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('profile') }}">
+                            <i class="fas fa-user me-2"></i>Profile
+                        </a>
+                    </li>
+                    {% if session.get('role') == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin') }}">
+                            <i class="fas fa-user-shield me-2"></i>Admin Panel
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">My Activities</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <a href="{{ url_for('add_activity') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i>Add New Activity
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Search and Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" action="{{ url_for('activities') }}" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="search" class="form-label">Search by Activity Type</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="search" name="search" placeholder="e.g., Running, Cycling, Yoga" value="{{ search }}">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="date_from" class="form-label">Date From</label>
+                            <input type="date" class="form-control" id="date_from" name="date_from">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="date_to" class="form-label">Date To</label>
+                            <input type="date" class="form-control" id="date_to" name="date_to">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Activities List -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">All Activities</h5>
+                </div>
+                <div class="card-body">
+                    {% if activities %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Activity Type</th>
+                                        <th>Duration (min)</th>
+                                        <th>Distance (km)</th>
+                                        <th>Calories</th>
+                                        <th>Notes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in activities %}
+                                        <tr>
+                                            <td>{{ activity.date }}</td>
+                                            <td>
+                                                {% if activity.activity_type == 'Running' %}
+                                                    <span class="badge bg-primary">{{ activity.activity_type }}</span>
+                                                {% elif activity.activity_type == 'Cycling' %}
+                                                    <span class="badge bg-success">{{ activity.activity_type }}</span>
+                                                {% elif activity.activity_type == 'Swimming' %}
+                                                    <span class="badge bg-info">{{ activity.activity_type }}</span>
+                                                {% elif activity.activity_type == 'Yoga' %}
+                                                    <span class="badge bg-warning">{{ activity.activity_type }}</span>
+                                                {% elif activity.activity_type == 'Weightlifting' %}
+                                                    <span class="badge bg-danger">{{ activity.activity_type }}</span>
+                                                {% elif activity.activity_type == 'HIIT' %}
+                                                    <span class="badge bg-dark">{{ activity.activity_type }}</span>
+                                                {% elif activity.activity_type == 'Walking' %}
+                                                    <span class="badge bg-secondary">{{ activity.activity_type }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-light text-dark">{{ activity.activity_type }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ activity.duration }}</td>
+                                            <td>{% if activity.distance %}{{ activity.distance }}{% else %}-{% endif %}</td>
+                                            <td>{{ activity.calories }}</td>
+                                            <td>{{ activity.notes[:20] }}{% if activity.notes and activity.notes|length > 20 %}...{% endif %}</td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewActivityModal{{ activity.id }}">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-secondary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                                
+                                                <!-- View Activity Modal -->
+                                                <div class="modal fade" id="viewActivityModal{{ activity.id }}" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">{{ activity.activity_type }} Details</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <dl class="row">
+                                                                    <dt class="col-sm-4">Date:</dt>
+                                                                    <dd class="col-sm-8">{{ activity.date }}</dd>
+                                                                    
+                                                                    <dt class="col-sm-4">Duration:</dt>
+                                                                    <dd class="col-sm-8">{{ activity.duration }} minutes</dd>
+                                                                    
+                                                                    {% if activity.distance %}
+                                                                    <dt class="col-sm-4">Distance:</dt>
+                                                                    <dd class="col-sm-8">{{ activity.distance }} km</dd>
+                                                                    {% endif %}
+                                                                    
+                                                                    <dt class="col-sm-4">Calories:</dt>
+                                                                    <dd class="col-sm-8">{{ activity.calories }}</dd>
+                                                                    
+                                                                    {% if activity.notes %}
+                                                                    <dt class="col-sm-4">Notes:</dt>
+                                                                    <dd class="col-sm-8">{{ activity.notes }}</dd>
+                                                                    {% endif %}
+                                                                </dl>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-3x mb-3 text-muted"></i>
+                            <p>No activities found{% if search %} matching "{{ search }}"{% endif %}.</p>
+                            <a href="{{ url_for('add_activity') }}" class="btn btn-primary">Add New Activity</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
